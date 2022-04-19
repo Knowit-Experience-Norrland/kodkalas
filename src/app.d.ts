@@ -8,3 +8,48 @@ declare namespace App {
 	// interface Session {}
 	// interface Stuff {}
 }
+
+type PokemonType = {
+	slot: number;
+	type: {
+		name: string;
+		url: string;
+	};
+};
+
+type PokemonStat = {
+	base_stat: number;
+	effort: number;
+	stat: {
+		name: string;
+		url: string;
+	};
+};
+
+type PokemonMove = {
+	move: {
+		name: string;
+		url: string;
+	};
+	version_group_details: any;
+};
+
+type Pokemon = {
+	id: number;
+	name: string;
+	imageUrl: string;
+	types: PokemonType[];
+	stats: PokemonStat[];
+	moves: PokemonMove[];
+};
+
+interface PokemonList {
+	count: number;
+	next: string | null;
+	previous: string | null;
+	results: Array<{
+		name: string;
+		imageUrl: string;
+		url: string;
+	}>;
+}

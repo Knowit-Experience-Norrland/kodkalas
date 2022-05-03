@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { extractIdFromUrl } from '../utils';
 	import { onMount } from 'svelte';
 	import { api } from '../api';
 	import { PokemonList, Pokemon } from '../store';
+	import PokemonCard from '../components/PokemonCard.svelte';
+	import { extractIdFromUrl } from '../utils';
+	import Grid from '../components/Grid.svelte';
+	import Modal from '../components/Modal.svelte';
 	let inputText = '';
 
 	const handleSubmit = async () => {
@@ -23,26 +26,22 @@
 	});
 </script>
 
-<h1>Welcome to SvelteKit KodKalas edition</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-
-<form on:submit|preventDefault={handleSubmit}>
+<!-- <form on:submit|preventDefault={handleSubmit}>
 	<input type="text" placeholder="Enter pokemon name" bind:value={inputText} />
 	<button type="submit">Search</button>
-</form>
+</form> -->
 
-{#if !$Pokemon}
-	<h2>PokemonList</h2>
-	{#each $PokemonList.results as result (result.name)}
-		<div on:click={() => handlePokemonClick(extractIdFromUrl(result.url))}>
-			<h3>{result.name}</h3>
-			<img src={result.imageUrl} alt="pokemon" />
-		</div>
-	{/each}
-{/if}
+<!-- {#if !$Pokemon} -->
+<div class="gridContainer">
+	<Grid colSize="sm">
+		{#each $PokemonList.results as result (result.name)}
+			<PokemonCard {result} />
+		{/each}
+	</Grid>
+</div>
+<!-- {/if} -->
 
-<br />
-{#if $Pokemon}
+<!-- {#if $Pokemon}
 	<button on:click={clearPokemon}>Back to list</button>
 	<h2>Pokemon</h2>
 	<h3>{$Pokemon.name}</h3>
@@ -52,4 +51,9 @@
 			{t.type.name},{' '}
 		{/each}
 	</p>
-{/if}
+{/if} -->
+<style>
+	.gridContainer {
+		padding: 3rem;
+	}
+</style>

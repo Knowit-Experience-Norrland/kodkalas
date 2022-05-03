@@ -6,6 +6,7 @@
 <style lang="scss">
 	footer {
 		width: min(90rem, calc(100% - 6rem));
+		margin-inline: auto;
 		background-color: $clr-bg-500;
 		display: flex;
 		justify-content: space-between;

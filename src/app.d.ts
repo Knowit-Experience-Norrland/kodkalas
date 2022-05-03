@@ -9,10 +9,28 @@ declare namespace App {
 	// interface Stuff {}
 }
 
+type PokemnTypeName =
+	| 'water'
+	| 'grass'
+	| 'electric'
+	| 'ice'
+	| 'fighting'
+	| 'poison'
+	| 'ground'
+	| 'flying'
+	| 'psychic'
+	| 'bug'
+	| 'rock'
+	| 'ghost'
+	| 'dark'
+	| 'dragon'
+	| 'steel'
+	| 'fairy';
+
 type PokemonType = {
 	slot: number;
 	type: {
-		name: string;
+		name: PokemnTypeName;
 		url: string;
 	};
 };

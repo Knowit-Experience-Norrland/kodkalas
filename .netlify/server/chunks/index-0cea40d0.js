@@ -17,13 +17,22 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var stdin_exports = {};
 __export(stdin_exports, {
+  a: () => safe_not_equal,
+  b: () => null_to_empty,
   c: () => create_ssr_component,
+  d: () => createEventDispatcher,
   e: () => escape,
+  f: () => add_attribute,
+  g: () => subscribe,
+  h: () => each,
   m: () => missing_component,
+  n: () => noop,
   s: () => setContext,
   v: () => validate_component
 });
 module.exports = __toCommonJS(stdin_exports);
+function noop() {
+}
 function run(fn) {
   return fn();
 }
@@ -33,6 +42,24 @@ function blank_object() {
 function run_all(fns) {
   fns.forEach(run);
 }
+function safe_not_equal(a, b) {
+  return a != a ? b == b : a !== b || (a && typeof a === "object" || typeof a === "function");
+}
+function subscribe(store, ...callbacks) {
+  if (store == null) {
+    return noop;
+  }
+  const unsub = store.subscribe(...callbacks);
+  return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+}
+function null_to_empty(value) {
+  return value == null ? "" : value;
+}
+function custom_event(type, detail, bubbles = false) {
+  const e = document.createEvent("CustomEvent");
+  e.initCustomEvent(type, bubbles, false, detail);
+  return e;
+}
 let current_component;
 function set_current_component(component) {
   current_component = component;
@@ -41,6 +68,18 @@ function get_current_component() {
   if (!current_component)
     throw new Error("Function called outside component initialization");
   return current_component;
+}
+function createEventDispatcher() {
+  const component = get_current_component();
+  return (type, detail) => {
+    const callbacks = component.$$.callbacks[type];
+    if (callbacks) {
+      const event = custom_event(type, detail);
+      callbacks.slice().forEach((fn) => {
+        fn.call(component, event);
+      });
+    }
+  };
 }
 function setContext(key, context) {
   get_current_component().$$.context.set(key, context);
@@ -55,6 +94,16 @@ const escaped = {
 };
 function escape(html) {
   return String(html).replace(/["'&<>]/g, (match) => escaped[match]);
+}
+function escape_attribute_value(value) {
+  return typeof value === "string" ? escape(value) : value;
+}
+function each(items, fn) {
+  let str = "";
+  for (let i = 0; i < items.length; i += 1) {
+    str += fn(items[i], i);
+  }
+  return str;
 }
 const missing_component = {
   $$render: () => ""
@@ -101,4 +150,10 @@ function create_ssr_component(fn) {
     },
     $$render
   };
+}
+function add_attribute(name, value, boolean) {
+  if (value == null || boolean && !value)
+    return "";
+  const assignment = boolean && value === true ? "" : `="${escape_attribute_value(value.toString())}"`;
+  return ` ${name}${assignment}`;
 }

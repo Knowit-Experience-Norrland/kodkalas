@@ -1,7 +1,13 @@
-<h1>Welcome to SvelteKit KodKalas edition</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<main>
+	<p>TODO: pokemone grid</p>
+</main>
 
-<style lang="sass">
-	h1
-		color: red
+<style>
+	main {
+		width: 100%;
+		height: calc(100vh - 218px);
+	}
+	p {
+		color: red;
+	}
 </style>

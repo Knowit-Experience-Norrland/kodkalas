@@ -20,6 +20,7 @@
 	}
 	body {
 		box-sizing: border-box;
+		background-color: $clr-bg-900;
 	}
 	img {
 		max-width: 100%;
